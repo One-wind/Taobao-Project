@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <button class="btn">获取所有数据</button>
+    <button class="add">添加数据</button>
+    <button class="update">修改数据</button>
+    <button class="addTest">goods db不添加测试数据</button>
+    <br>
+    <form class="upload"  method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+        <input type="file" name="pic" accept="image/*">
+        <input type="submit" name="" value="上传" >
+    </form>
+    <script>
+        $('.addTest').onclick = function (ev) {
+            ajax({
+                method: 'post',
+                url: 'http://192.168.6.48:3000/db',
+                data: {
+                    flag: 'addtestdata',
+
+                }
+            }).then(res => {
+                console.log(res)
+            })
+        }
+        $('.update').onclick = function (ev) {
+            ajax({
+                method: 'post',
+                url: 'http://192.168.6.48:3000/db',
+                data: {
+                    flag: 'update',
+
+                }
+            }).then(res => {
+                console.log(res)
+            })
+        }
+        $('.add').onclick = function () {
+            ajax({
+                method: 'post',
+                url: 'http://192.168.6.48:3000/db',
+                data: {
+                    flag: 'add',
+
+                }
+            }).then(res => {
+                console.log(res)
+            })
+        }
+        $('.btn').onclick = function () {
+            ajax({
+                method: 'post',
+                url: 'http://192.168.6.48:3000/db',
+                data: {
+                    flag: 'findAll',
+
+                }
+            }).then(res => {
+                console.log(res)
+            })
+        }
+        /*
+        {
+            method: ' post/get',
+            url:'',
+            data:{
+
+            }
+        }
+        */
+        function ajax(reqData) {
+            return new Promise((resolve, reject) => {
+                let fd = null
+                if ('post' == reqData.method || 'POST' == reqData.method) {
+                    fd = new FormData()
+                    for (const key in reqData.data) {
+                        fd.append(key, reqData.data[key])
+                    }
+                }
+                let xhr = new XMLHttpRequest()
+                xhr.open(reqData.method, reqData.url)
+                //设置请求头
+                xhr.send(fd)
+                xhr.onreadystatechange = function () {
+                    if (4 === this.readyState && 200 === this.status) {
+                        try {
+                            resolve(JSON.parse(this.responseText))
+                        } catch (error) {
+                            resolve(this.responseText)
+                        }
+                    }
+                }
+            })
+        }
+
+        function $(select) {
+            return document.querySelector(select)
+        }
+    </script>
+    <script>
+        var upload = document.querySelector(".upload");
+        upload.onsubmit = function (ev) {
+            ev.preventDefault()
+            console.log('submit')
+            //获取表单数据
+            var oData = new FormData(upload);
+            //添加字段
+            oData.append("picDir", "hello");
+            var xhr =  new XMLHttpRequest();
+            xhr.open("POST", "http://192.168.6.48:3000/upload");
+            xhr.send(oData);
+            xhr.onreadystatechange = function () {
+                if (4 == xhr.readyState && 200 == xhr.status) {
+                    console.log( xhr.responseText )
+                }
+            }
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
