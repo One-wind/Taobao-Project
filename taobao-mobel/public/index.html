@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 移动端开发设置 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // 先获取 可视区域的宽高 
+      var iw = document.documentElement.clientWidth;
+      var iH = document.documentElement.clientHeight;
+      // 对于小于320px的逻辑像素宽 则 卡住 不缩放啦不适配啦
+      iw = iw < 375 ? 375 : iw;
+      //获取 html元素
+      // cssrem 插件  比如 以ihone7为基准开发 
+      document.querySelector('html').style.fontSize = iw / 23.4375 + 'px';
+      // 把 body的高度撑开
+      document.querySelector('body').style.height = iH + 'px';
+    </script>
+  </body>
+</html>
